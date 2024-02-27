@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - logicalFilePath: db/changelog/changelog.yaml
+  - changeSet:
+      id: 1
+      author: Sergei Guliaev
+      comment: first init tables
+      changes:
+        - sqlFile:
+            path: db/sql/M-01.sql
+      rollback:
+        - sqlFile:
+            path: db/rollback/R-01.sql

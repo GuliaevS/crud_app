@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: crud_app
+  datasource:
+    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5433/crud_app}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
