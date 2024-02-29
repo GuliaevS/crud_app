@@ -10,3 +10,13 @@ databaseChangeLog:
       rollback:
         - sqlFile:
             path: db/rollback/R-01.sql
+  - changeSet:
+      id: 2
+      author: Sergei Guliaev
+      comment: add tables roles and clients_role
+      changes:
+        - sqlFile:
+            path: db/sql/M-02.sql
+      rollback:
+        - sqlFile:
+            path: db/rollback/R-02.sql

@@ -23,8 +23,9 @@ public class ClientServiceImp implements ClientService {
 
     @Override
     @Transactional
-    public void createClient(Client client) {
+    public StatusResponse createClient(Client client) {
         clientRepository.save(client);
+        return new StatusResponse("Данные успешно записаны");
     }
 
     @Override
@@ -53,8 +54,9 @@ public class ClientServiceImp implements ClientService {
 
     @Override
     @Transactional
-    public void deleteById(Long id) {
+    public StatusResponse deleteById(Long id) {
         clientRepository.deleteById(id);
+        return new StatusResponse("Данные успешно удалены");
     }
 
     public BigDecimal calculate(BigDecimal one, BigDecimal two, String command) {

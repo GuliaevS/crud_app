@@ -48,4 +48,10 @@ class ClientServiceImpTest {
         Assertions.assertEquals("Bessonov", result.getSurname());
         Assertions.assertEquals(1, result.getId());
     }
+
+    @Test
+    void calculate_divideCommand_success(){
+        BigDecimal result = clientService.calculate(new BigDecimal(25),new BigDecimal(5),"divide");
+        Assertions.assertEquals(new BigDecimal(5),result);
+    }
 }

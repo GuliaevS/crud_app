@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ClientService {
 
-     void createClient(Client client);
+    StatusResponse createClient(Client client);
 
     Client getClientById(Long id);
 
@@ -16,6 +16,6 @@ public interface ClientService {
 
     Client update(Client client);
 
-    void deleteById(Long id);
+    StatusResponse deleteById(Long id);
 
 }

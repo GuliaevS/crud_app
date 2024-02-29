@@ -3,9 +3,11 @@ package ru.guliaev.crud_app.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import ru.guliaev.crud_app.controller.dto.RoleRequest;
 import ru.guliaev.crud_app.controller.dto.StatusResponse;
 import ru.guliaev.crud_app.entity.Client;
 import ru.guliaev.crud_app.service.imp.ClientServiceImp;
+import ru.guliaev.crud_app.service.imp.RoleServiceImp;
 
 import java.util.List;
 
@@ -19,17 +21,18 @@ public class ClientController {
 
     /**
      * Создание нового клиента
+     *
      * @param client Персольные данные клиента
      * @return статус
      */
     @PostMapping("/create")
     public StatusResponse create(@RequestBody Client client) {
-        clientServiceImp.createClient(client);
-        return new StatusResponse("Данные успешно записаны");
+        return clientServiceImp.createClient(client);
     }
 
     /**
      * Поиск клиента по id
+     *
      * @param id
      * @return клиент
      */
@@ -40,6 +43,7 @@ public class ClientController {
 
     /**
      * Получение списка всех клиенов
+     *
      * @return список
      */
     @GetMapping("/findAll")
@@ -49,24 +53,23 @@ public class ClientController {
 
     /**
      * Обновление данных существующих клиентов
-     * @param client  Изменяемый клиент
+     *
+     * @param client Изменяемый клиент
      * @return клиент
      */
-    @PostMapping ("/update")
+    @PostMapping("/update")
     public Client update(@RequestBody Client client) {
         return clientServiceImp.update(client);
     }
 
     /**
      * Удаление клиента
+     *
      * @param id
      * @return статус
      */
     @DeleteMapping("/delete/{id}")
     public StatusResponse delete(@PathVariable Long id) {
-        clientServiceImp.deleteById(id);
-        return new StatusResponse("Данные успешно удалены");
+        return clientServiceImp.deleteById(id);
     }
-
-
 }
