@@ -1,13 +1,12 @@
 package ru.guliaev.crud_app.controller;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.guliaev.crud_app.controller.dto.RoleRequest;
+import ru.guliaev.crud_app.controller.dto.ClientDto;
 import ru.guliaev.crud_app.controller.dto.StatusResponse;
-import ru.guliaev.crud_app.entity.Client;
 import ru.guliaev.crud_app.service.imp.ClientServiceImp;
-import ru.guliaev.crud_app.service.imp.RoleServiceImp;
 
 import java.util.List;
 
@@ -22,22 +21,22 @@ public class ClientController {
     /**
      * Создание нового клиента
      *
-     * @param client Персольные данные клиента
+     * @param clientDto Персольные данные клиента
      * @return статус
      */
-    @PostMapping("/create")
-    public StatusResponse create(@RequestBody Client client) {
-        return clientServiceImp.createClient(client);
+    @PostMapping("/create") // для всех
+    public StatusResponse create(@RequestBody ClientDto clientDto) {
+        return clientServiceImp.createClient(clientDto);
     }
 
     /**
      * Поиск клиента по id
      *
      * @param id
-     * @return клиент
+     * @return clientDto
      */
     @GetMapping("/find/{id}")
-    public Client findById(@PathVariable Long id) {
+    public ClientDto findById(@NotBlank @PathVariable Long id) {
         return clientServiceImp.getClientById(id);
     }
 
@@ -46,20 +45,20 @@ public class ClientController {
      *
      * @return список
      */
-    @GetMapping("/findAll")
-    public List<Client> findAll() {
+    @GetMapping("/findAll") //для всех
+    public List<ClientDto> findAll() {
         return clientServiceImp.getAllClients();
     }
 
     /**
      * Обновление данных существующих клиентов
      *
-     * @param client Изменяемый клиент
+     * @param id Изменяемый клиент
      * @return клиент
      */
     @PostMapping("/update")
-    public Client update(@RequestBody Client client) {
-        return clientServiceImp.update(client);
+    public ClientDto update(@RequestParam Long id) {
+        return clientServiceImp.update(id);
     }
 
     /**
@@ -71,5 +70,15 @@ public class ClientController {
     @DeleteMapping("/delete/{id}")
     public StatusResponse delete(@PathVariable Long id) {
         return clientServiceImp.deleteById(id);
+    }
+
+    /**
+     * Удаление всех клиентов
+     *
+     * @return статус
+     */
+    @DeleteMapping("/deleteAll")
+    public StatusResponse deleteAll() {
+        return clientServiceImp.deleteAll();
     }
 }

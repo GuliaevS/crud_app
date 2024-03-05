@@ -2,14 +2,15 @@ package ru.guliaev.crud_app.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Table(name = "roles")
 public class Role {
 
@@ -25,14 +26,4 @@ public class Role {
      */
     @Column(name = "role")
     private String nameOfRole;
-
-    /**
-     * Клиент
-     */
-    @ToString.Exclude
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "client_id")
-    private Client client;
-
-
 }

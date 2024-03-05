@@ -1,14 +1,15 @@
 package ru.guliaev.crud_app.service.imp;
 
-import jdk.jshell.spi.ExecutionControl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.guliaev.crud_app.controller.dto.ClientDto;
 import ru.guliaev.crud_app.controller.dto.StatusResponse;
 import ru.guliaev.crud_app.entity.Client;
 import ru.guliaev.crud_app.repository.ClientRepository;
 import ru.guliaev.crud_app.service.ClientService;
+import ru.guliaev.crud_app.utils.ClientDtoMapper;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -23,40 +24,54 @@ public class ClientServiceImp implements ClientService {
 
     @Override
     @Transactional
-    public StatusResponse createClient(Client client) {
-        clientRepository.save(client);
+    public StatusResponse createClient(ClientDto clientDto) {
+        clientRepository.save(ClientDtoMapper.toEntity(clientDto));
         return new StatusResponse("Данные успешно записаны");
     }
 
     @Override
     @Transactional
-    public Client getClientById(Long id) {
-        return clientRepository.findById(id).orElse(null);
+    public ClientDto getClientById(Long id) {
+        Client client = clientRepository.findById(id)
+                .orElseThrow();
+        return ClientDtoMapper.toDto(client);
     }
 
     @Override
     @Transactional
-    public List<Client> getAllClients() {
-        return (List<Client>) clientRepository.findAll();
+    public List<ClientDto> getAllClients() {
+        List<Client> allClients = (List<Client>) clientRepository.findAll();
+        return allClients.stream()
+                .map(ClientDtoMapper::toDto)
+                .toList();
     }
 
     @Override
     @Transactional
-    public Client update(Client client) {
-        Client updateClient = clientRepository.findById(client.getId())
-                .orElse(null);
-        updateClient.setName(client.getName());
-        updateClient.setSurname(client.getSurname());
-        updateClient.setBirthday(client.getBirthday());
-        updateClient.setPhoneNumber(client.getPhoneNumber());
-        return clientRepository.save(updateClient);
+    public ClientDto update(Long id) {
+        Client client = clientRepository.findById(id)
+                .orElseThrow();
+        ClientDto clientDto = ClientDtoMapper.toDto(client);
+        clientDto.setName(clientDto.getName());
+        clientDto.setSurname(clientDto.getSurname());
+        clientDto.setBirthday(clientDto.getBirthday());
+        clientDto.setPhoneNumber(clientDto.getPhoneNumber());
+        ClientDtoMapper.toEntity(clientDto);
+        clientRepository.save(client);
+        return clientDto;
     }
 
     @Override
     @Transactional
     public StatusResponse deleteById(Long id) {
         clientRepository.deleteById(id);
-        return new StatusResponse("Данные успешно удалены");
+        return new StatusResponse("Данные клиента успешно удалены");
+    }
+
+    @Override
+    public StatusResponse deleteAll() {
+        clientRepository.deleteAll();
+        return new StatusResponse("Данные всех клиентов успешно удалены");
     }
 
     public BigDecimal calculate(BigDecimal one, BigDecimal two, String command) {

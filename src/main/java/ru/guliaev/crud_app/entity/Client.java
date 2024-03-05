@@ -1,13 +1,10 @@
 package ru.guliaev.crud_app.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Data
@@ -48,4 +45,11 @@ public class Client {
      */
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    /**
+     * Роль
+     */
+    @ToString.Exclude
+    @OneToMany(mappedBy ="clients", cascade = CascadeType.ALL)
+    private List<Role> role;
 }

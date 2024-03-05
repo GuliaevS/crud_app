@@ -1,12 +1,21 @@
 package ru.guliaev.crud_app.service;
 
-import ru.guliaev.crud_app.controller.dto.RoleRequest;
+import ru.guliaev.crud_app.controller.dto.RoleDto;
+import ru.guliaev.crud_app.controller.dto.UpdateRoleRequest;
 import ru.guliaev.crud_app.controller.dto.StatusResponse;
-import ru.guliaev.crud_app.entity.Role;
+
+import java.util.List;
 
 public interface RoleService {
 
-    StatusResponse create(Role role);
+    StatusResponse create(RoleDto roleDto);
 
-    StatusResponse set(RoleRequest roleRequest);
+    List<RoleDto> getAllRoles();
+
+    StatusResponse update(UpdateRoleRequest updateRoleRequest);
+
+    StatusResponse delete (Long id);
+
+    StatusResponse deleteAll();
+
 }
