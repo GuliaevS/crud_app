@@ -50,6 +50,6 @@ public class Client {
      * Роль
      */
     @ToString.Exclude
-    @OneToMany(mappedBy ="clients", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "clients")
     private List<Role> role;
 }

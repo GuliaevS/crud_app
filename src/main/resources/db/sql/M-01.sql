@@ -11,5 +11,11 @@ CREATE TABLE clients
     surname      VARCHAR(255),
     birthday     DATE,
     phone_number VARCHAR(255),
-    role_id SERIAL REFERENCES roles (id)
+    role_id      SERIAL REFERENCES roles (id)
 );
+
+CREATE TABLE permissions
+(
+    id   SERIAL PRIMARY KEY,
+    name VARCHAR(255)
+)

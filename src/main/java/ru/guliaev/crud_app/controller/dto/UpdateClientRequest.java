@@ -6,17 +6,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateRoleRequest {
+@Builder
+public class UpdateClientRequest {
     /**
-     * id роли
+     * id клиента
      */
     private long id;
 
     /**
-     * Роль
+     * Клиент
      */
-    private RoleDto roleDto;
+    private ClientDto clientDto;
 }

@@ -1,5 +1,7 @@
 package ru.guliaev.crud_app.controller;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +27,7 @@ public class RoleController {
      * @return статус
      */
     @PostMapping("/create")
-    public StatusResponse create(@RequestBody RoleDto roleDto) {
+    public StatusResponse create(@Valid @RequestBody RoleDto roleDto) {
         return roleServiceImp.create(roleDto);
     }
 
@@ -46,7 +48,7 @@ public class RoleController {
      * @return статус
      */
     @PostMapping("/update")
-    public StatusResponse update(@RequestBody UpdateRoleRequest updateRoleRequest) {
+    public StatusResponse update(@Valid @RequestBody UpdateRoleRequest updateRoleRequest) {
         return roleServiceImp.update(updateRoleRequest);
     }
 
@@ -57,7 +59,7 @@ public class RoleController {
      * @return статус
      */
     @DeleteMapping("/delete/{id}")
-    public StatusResponse delete(@PathVariable Long id) {
+    public StatusResponse delete(@NotBlank @PathVariable Long id) {
         return roleServiceImp.delete(id);
     }
 

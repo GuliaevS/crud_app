@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.guliaev.crud_app.controller.dto.ClientDto;
 import ru.guliaev.crud_app.controller.dto.StatusResponse;
+import ru.guliaev.crud_app.controller.dto.UpdateClientRequest;
 import ru.guliaev.crud_app.entity.Client;
 import ru.guliaev.crud_app.repository.ClientRepository;
 import ru.guliaev.crud_app.service.ClientService;
@@ -48,17 +49,16 @@ public class ClientServiceImp implements ClientService {
 
     @Override
     @Transactional
-    public ClientDto update(Long id) {
-        Client client = clientRepository.findById(id)
+    public StatusResponse update(UpdateClientRequest updateClientRequest) {
+        Client client = clientRepository.findById(updateClientRequest.getId())
                 .orElseThrow();
-        ClientDto clientDto = ClientDtoMapper.toDto(client);
-        clientDto.setName(clientDto.getName());
-        clientDto.setSurname(clientDto.getSurname());
-        clientDto.setBirthday(clientDto.getBirthday());
-        clientDto.setPhoneNumber(clientDto.getPhoneNumber());
-        ClientDtoMapper.toEntity(clientDto);
+        ClientDto clientDto = updateClientRequest.getClientDto();
+        client.setName(clientDto.getName());
+        client.setSurname(clientDto.getSurname());
+        client.setBirthday(clientDto.getBirthday());
+        client.setPhoneNumber(clientDto.getPhoneNumber());
         clientRepository.save(client);
-        return clientDto;
+        return new StatusResponse("Даннные клиента успешно обновлены");
     }
 
     @Override

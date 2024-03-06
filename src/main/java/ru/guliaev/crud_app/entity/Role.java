@@ -26,4 +26,8 @@ public class Role {
      */
     @Column(name = "role")
     private String nameOfRole;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "client_id")
+    private Client client;
 }
