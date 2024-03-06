@@ -1,17 +1,16 @@
 package ru.guliaev.crud_app.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "roles")
+@Table(name = "role")
 public class Role {
 
     /**
@@ -24,10 +23,19 @@ public class Role {
     /**
      * Название роли
      */
-    @Column(name = "role")
+    @Column(name = "name_of_role")
     private String nameOfRole;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "client_id")
-    private Client client;
+    @Builder.Default
+    @ToString.Exclude
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
+    private List<Client> clients = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id=" + id +
+                ", nameOfRole='" + nameOfRole + '\'' +
+                '}';
+    }
 }

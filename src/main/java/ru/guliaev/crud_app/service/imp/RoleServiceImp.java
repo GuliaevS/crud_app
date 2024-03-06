@@ -25,7 +25,7 @@ public class RoleServiceImp implements RoleService {
     @Override
     @Transactional
     public StatusResponse create(RoleDto roleDto) {
-        roleRepository.save(RoleDtoMapper.toEntity(roleDto));
+        roleRepository.save(RoleDtoMapper.toEntity(roleDto));// todo возвращать сохраненную сущность
         return new StatusResponse("Роль успешно создана");
     }
 

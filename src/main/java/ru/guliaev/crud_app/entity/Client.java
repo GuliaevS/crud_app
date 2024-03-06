@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "clients")
+@Table(name = "client")
 public class Client {
 
     /**
@@ -49,7 +49,24 @@ public class Client {
     /**
      * Роль
      */
-    @ToString.Exclude
-    @OneToMany(mappedBy = "clients")
-    private List<Role> role;
+//    @ToString.Exclude
+//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+//    @JoinColumn(name = "role_id")
+//    private Role role;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "role_id")
+    private Role role;
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", birthday=" + birthday +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", role=" + role +
+                '}';
+    }
 }

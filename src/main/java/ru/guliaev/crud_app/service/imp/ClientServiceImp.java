@@ -8,12 +8,14 @@ import ru.guliaev.crud_app.controller.dto.ClientDto;
 import ru.guliaev.crud_app.controller.dto.StatusResponse;
 import ru.guliaev.crud_app.controller.dto.UpdateClientRequest;
 import ru.guliaev.crud_app.entity.Client;
+import ru.guliaev.crud_app.entity.Role;
 import ru.guliaev.crud_app.repository.ClientRepository;
 import ru.guliaev.crud_app.service.ClientService;
 import ru.guliaev.crud_app.utils.ClientDtoMapper;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,7 +28,16 @@ public class ClientServiceImp implements ClientService {
     @Override
     @Transactional
     public StatusResponse createClient(ClientDto clientDto) {
-        clientRepository.save(ClientDtoMapper.toEntity(clientDto));
+        Client entity = ClientDtoMapper.toEntity(clientDto);
+        clientRepository.save(entity);
+
+        //todo При создании пользователя указывать его роль текстом
+        //
+        //{
+        //"name": "Andrew",
+        //"surname": "Bessonov",
+        //"role": "admin"
+        //}
         return new StatusResponse("Данные успешно записаны");
     }
 
