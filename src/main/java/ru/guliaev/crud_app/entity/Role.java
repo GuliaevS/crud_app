@@ -30,12 +30,4 @@ public class Role {
     @ToString.Exclude
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
     private List<Client> clients = new ArrayList<>();
-
-    @Override
-    public String toString() {
-        return "Role{" +
-                "id=" + id +
-                ", nameOfRole='" + nameOfRole + '\'' +
-                '}';
-    }
 }

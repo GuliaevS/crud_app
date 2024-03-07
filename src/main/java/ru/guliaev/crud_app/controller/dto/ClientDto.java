@@ -39,5 +39,9 @@ public class ClientDto {
     @Max(10)
     private String phoneNumber;
 
-    //todo поле роль
+    /**
+     *
+     */
+    @NotBlank
+    private String clientRole;
 }

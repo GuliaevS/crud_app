@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.guliaev.crud_app.controller.dto.RoleDto;
-import ru.guliaev.crud_app.controller.dto.UpdateRoleRequest;
 import ru.guliaev.crud_app.controller.dto.StatusResponse;
 import ru.guliaev.crud_app.service.imp.RoleServiceImp;
 
@@ -23,11 +22,11 @@ public class RoleController {
     /**
      * Создание новой роли
      *
-     * @param roleDto
-     * @return статус
+     * @param roleDto Новая роль
+     * @return roleDto
      */
     @PostMapping("/create")
-    public StatusResponse create(@Valid @RequestBody RoleDto roleDto) {
+    public RoleDto create(@Valid @RequestBody RoleDto roleDto) {
         return roleServiceImp.create(roleDto);
     }
 
@@ -44,12 +43,13 @@ public class RoleController {
     /**
      * Изменение существующей роли
      *
-     * @param updateRoleRequest данные на обновление
-     * @return статус
+     * @param roleDto данные на обновление
+     * @param id роли
+     * @return roleDto
      */
     @PostMapping("/update")
-    public StatusResponse update(@Valid @RequestBody UpdateRoleRequest updateRoleRequest) {
-        return roleServiceImp.update(updateRoleRequest);
+    public RoleDto update(@Valid @RequestBody RoleDto roleDto, @NotBlank Long id) {
+        return roleServiceImp.update(roleDto, id);
     }
 
     /**

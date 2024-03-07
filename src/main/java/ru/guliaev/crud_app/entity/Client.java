@@ -49,24 +49,8 @@ public class Client {
     /**
      * Роль
      */
-//    @ToString.Exclude
-//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-//    @JoinColumn(name = "role_id")
-//    private Role role;
-
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "role_id")
     private Role role;
 
-    @Override
-    public String toString() {
-        return "Client{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", birthday=" + birthday +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", role=" + role +
-                '}';
-    }
 }

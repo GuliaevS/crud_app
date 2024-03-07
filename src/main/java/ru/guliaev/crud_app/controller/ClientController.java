@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.guliaev.crud_app.controller.dto.ClientDto;
 import ru.guliaev.crud_app.controller.dto.StatusResponse;
-import ru.guliaev.crud_app.controller.dto.UpdateClientRequest;
 import ru.guliaev.crud_app.service.imp.ClientServiceImp;
 
 import java.util.List;
@@ -24,10 +23,10 @@ public class ClientController {
      * Создание нового клиента
      *
      * @param clientDto Персольные данные клиента
-     * @return статус
+     * @return clientDto объект
      */
     @PostMapping("/create")
-    public StatusResponse create(@Valid @RequestBody ClientDto clientDto) {
+    public ClientDto create(@Valid @RequestBody ClientDto clientDto) {
         log.info("[API] create new client {}", clientDto.getSurname());
         return clientServiceImp.createClient(clientDto);
     }
@@ -36,7 +35,7 @@ public class ClientController {
      * Поиск клиента по id
      *
      * @param id клиента
-     * @return clientDto
+     * @return clientDto объект
      */
     @GetMapping("/find/{id}")
     public ClientDto findById(@NotBlank @PathVariable Long id) {
@@ -58,13 +57,14 @@ public class ClientController {
     /**
      * Обновление данных существующих клиентов
      *
-     * @param updateClientRequest запрос на обновление
-     * @return статус
+     * @param clientDto Новое данные клиента
+     * @param id клиента
+     * @return
      */
     @PostMapping("/update")
-    public StatusResponse update(@Valid @RequestBody UpdateClientRequest updateClientRequest) {
-        log.info("[API] update client {}", updateClientRequest.getClientDto().getSurname());
-        return clientServiceImp.update(updateClientRequest);
+    public ClientDto update(@Valid @RequestBody ClientDto clientDto, @NotBlank @PathVariable Long id) {
+        log.info("[API] update client {} with id = ", clientDto, id);
+        return clientServiceImp.update(clientDto, id);
     }
 
     /**

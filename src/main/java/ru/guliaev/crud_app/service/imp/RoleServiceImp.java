@@ -4,9 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
 import ru.guliaev.crud_app.controller.dto.RoleDto;
-import ru.guliaev.crud_app.controller.dto.UpdateRoleRequest;
 import ru.guliaev.crud_app.controller.dto.StatusResponse;
 import ru.guliaev.crud_app.entity.Role;
 import ru.guliaev.crud_app.repository.RoleRepository;
@@ -24,9 +22,9 @@ public class RoleServiceImp implements RoleService {
 
     @Override
     @Transactional
-    public StatusResponse create(RoleDto roleDto) {
-        roleRepository.save(RoleDtoMapper.toEntity(roleDto));// todo возвращать сохраненную сущность
-        return new StatusResponse("Роль успешно создана");
+    public RoleDto create(RoleDto roleDto) {
+        roleRepository.save(RoleDtoMapper.toEntity(roleDto));
+        return roleDto;
     }
 
     @Override
@@ -40,12 +38,12 @@ public class RoleServiceImp implements RoleService {
 
     @Override
     @Transactional
-    public StatusResponse update(@RequestBody UpdateRoleRequest updateRoleRequest) {
-        Role role = roleRepository.findById(updateRoleRequest.getId())
+    public RoleDto update(RoleDto roleDto, Long id) {
+        Role role = roleRepository.findById(id)
                 .orElseThrow();
-        role.setNameOfRole(updateRoleRequest.getRoleDto().getNameOfRole());
+        role.setNameOfRole(roleDto.getNameOfRole());
         roleRepository.save(role);
-        return new StatusResponse("Роль успешно обновлена");
+        return roleDto;
     }
 
     @Override

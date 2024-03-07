@@ -5,17 +5,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.guliaev.crud_app.controller.dto.ClientDto;
+import ru.guliaev.crud_app.controller.dto.RoleDto;
 import ru.guliaev.crud_app.controller.dto.StatusResponse;
-import ru.guliaev.crud_app.controller.dto.UpdateClientRequest;
 import ru.guliaev.crud_app.entity.Client;
 import ru.guliaev.crud_app.entity.Role;
 import ru.guliaev.crud_app.repository.ClientRepository;
+import ru.guliaev.crud_app.repository.RoleRepository;
 import ru.guliaev.crud_app.service.ClientService;
 import ru.guliaev.crud_app.utils.ClientDtoMapper;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,12 +24,14 @@ import java.util.List;
 public class ClientServiceImp implements ClientService {
 
     private final ClientRepository clientRepository;
+    private final RoleRepository roleRepository;
 
     @Override
     @Transactional
-    public StatusResponse createClient(ClientDto clientDto) {
-        Client entity = ClientDtoMapper.toEntity(clientDto);
-        clientRepository.save(entity);
+    public ClientDto createClient(ClientDto clientDto) {
+        Client client = ClientDtoMapper.toEntity(clientDto);
+        RoleDto roleDto = new RoleDto(clientDto.getClientRole()); // получил роль от клиента
+        Role role = roleRepository.findByName(roleDto.getNameOfRole());
 
         //todo При создании пользователя указывать его роль текстом
         //
@@ -38,7 +40,7 @@ public class ClientServiceImp implements ClientService {
         //"surname": "Bessonov",
         //"role": "admin"
         //}
-        return new StatusResponse("Данные успешно записаны");
+        return ClientDtoMapper.toDto(client) ;
     }
 
     @Override
@@ -60,16 +62,15 @@ public class ClientServiceImp implements ClientService {
 
     @Override
     @Transactional
-    public StatusResponse update(UpdateClientRequest updateClientRequest) {
-        Client client = clientRepository.findById(updateClientRequest.getId())
+    public ClientDto update(ClientDto clientDto, Long  id) {
+        Client client = clientRepository.findById(id)
                 .orElseThrow();
-        ClientDto clientDto = updateClientRequest.getClientDto();
         client.setName(clientDto.getName());
         client.setSurname(clientDto.getSurname());
         client.setBirthday(clientDto.getBirthday());
         client.setPhoneNumber(clientDto.getPhoneNumber());
         clientRepository.save(client);
-        return new StatusResponse("Даннные клиента успешно обновлены");
+        return clientDto;
     }
 
     @Override
