@@ -12,9 +12,6 @@ import ru.guliaev.crud_app.repository.ClientRepository;
 import ru.guliaev.crud_app.repository.RoleRepository;
 import ru.guliaev.crud_app.service.ClientService;
 import ru.guliaev.crud_app.utils.ClientDtoMapper;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
 
