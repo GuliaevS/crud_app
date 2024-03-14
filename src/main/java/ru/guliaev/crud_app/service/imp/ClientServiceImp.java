@@ -12,6 +12,7 @@ import ru.guliaev.crud_app.repository.ClientRepository;
 import ru.guliaev.crud_app.repository.RoleRepository;
 import ru.guliaev.crud_app.service.ClientService;
 import ru.guliaev.crud_app.utils.ClientDtoMapper;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
@@ -96,25 +97,7 @@ public class ClientServiceImp implements ClientService {
     @Override
     @Transactional
     public StatusResponse deleteAll() {
-        Iterable<Client> allClients = clientRepository.findAll();
         clientRepository.deleteAll();
         return new StatusResponse("Данные всех клиентов успешно удалены");
-    }
-
-    @Deprecated(since = "1.04.24")
-    public BigDecimal calculate(BigDecimal one, BigDecimal two, String command) {
-        if ("multiply".equals(command)) {
-            return one.multiply(two);
-        }
-        if ("divide".equals(command)) {
-            return one.divide(two, RoundingMode.HALF_UP);
-        }
-        if ("add".equals(command)) {
-            return one.add(two);
-        }
-        if ("max".equals(command)) {
-            return one.max(two);
-        }
-        throw new RuntimeException("Command %s is not supported".formatted(command));
     }
 }
