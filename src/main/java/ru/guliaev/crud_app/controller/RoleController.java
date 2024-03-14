@@ -1,14 +1,12 @@
 package ru.guliaev.crud_app.controller;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.guliaev.crud_app.controller.dto.RoleDto;
 import ru.guliaev.crud_app.controller.dto.StatusResponse;
 import ru.guliaev.crud_app.service.imp.RoleServiceImp;
-
 import java.util.List;
 
 @RestController
@@ -27,6 +25,7 @@ public class RoleController {
      */
     @PostMapping("/create")
     public RoleDto create(@Valid @RequestBody RoleDto roleDto) {
+        log.info("[API] start create new role {}", roleDto);
         return roleServiceImp.create(roleDto);
     }
 
@@ -37,6 +36,7 @@ public class RoleController {
      */
     @GetMapping("/findAll")
     public List<RoleDto> findAll() {
+        log.info("[API] start find all roles");
         return roleServiceImp.getAllRoles();
     }
 
@@ -44,11 +44,12 @@ public class RoleController {
      * Изменение существующей роли
      *
      * @param roleDto данные на обновление
-     * @param id роли
+     * @param id      роли
      * @return roleDto
      */
-    @PostMapping("/update")
-    public RoleDto update(@Valid @RequestBody RoleDto roleDto, @NotBlank Long id) {
+    @PostMapping("/update/{id}")
+    public RoleDto update(@RequestBody RoleDto roleDto, @PathVariable Long id) {
+        log.info("[API] start update role {}", roleDto);
         return roleServiceImp.update(roleDto, id);
     }
 
@@ -59,7 +60,8 @@ public class RoleController {
      * @return статус
      */
     @DeleteMapping("/delete/{id}")
-    public StatusResponse delete(@NotBlank @PathVariable Long id) {
+    public StatusResponse delete(@PathVariable Long id) {
+        log.info("[API] start delete role_id {}", id);
         return roleServiceImp.delete(id);
     }
 
@@ -70,6 +72,7 @@ public class RoleController {
      */
     @DeleteMapping("/deleteAll")
     public StatusResponse deleteAll() {
+        log.info("[API] start delete all roles");
         return roleServiceImp.deleteAll();
     }
 }

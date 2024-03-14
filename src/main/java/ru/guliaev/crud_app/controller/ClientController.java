@@ -1,14 +1,12 @@
 package ru.guliaev.crud_app.controller;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.guliaev.crud_app.controller.dto.ClientDto;
 import ru.guliaev.crud_app.controller.dto.StatusResponse;
 import ru.guliaev.crud_app.service.imp.ClientServiceImp;
-
 import java.util.List;
 
 @RestController
@@ -27,7 +25,7 @@ public class ClientController {
      */
     @PostMapping("/create")
     public ClientDto create(@Valid @RequestBody ClientDto clientDto) {
-        log.info("[API] create new client {}", clientDto.getSurname());
+        log.info("[API] create new client {}", clientDto);
         return clientServiceImp.createClient(clientDto);
     }
 
@@ -38,7 +36,7 @@ public class ClientController {
      * @return clientDto объект
      */
     @GetMapping("/find/{id}")
-    public ClientDto findById(@NotBlank @PathVariable Long id) {
+    public ClientDto findById(@PathVariable Long id) {
         log.info("[API] find client with id = {}", id);
         return clientServiceImp.getClientById(id);
     }
@@ -59,11 +57,12 @@ public class ClientController {
      *
      * @param clientDto Новое данные клиента
      * @param id клиента
-     * @return
+     * @return clientDto - обновленный клиент, id
      */
-    @PostMapping("/update")
-    public ClientDto update(@Valid @RequestBody ClientDto clientDto, @NotBlank @PathVariable Long id) {
-        log.info("[API] update client {} with id = ", clientDto, id);
+
+    @PostMapping("/update/{id}")
+    public ClientDto update(@RequestBody ClientDto clientDto, @PathVariable Long id) {
+        log.info("[API] update client {}", clientDto);
         return clientServiceImp.update(clientDto, id);
     }
 
@@ -74,7 +73,7 @@ public class ClientController {
      * @return статус
      */
     @DeleteMapping("/delete/{id}")
-    public StatusResponse delete(@NotBlank @PathVariable Long id) {
+    public StatusResponse delete(@PathVariable Long id) {
         log.info("[API] delete client with id = {}", id);
         return clientServiceImp.deleteById(id);
     }

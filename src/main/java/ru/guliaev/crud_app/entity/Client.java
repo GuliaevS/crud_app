@@ -2,9 +2,7 @@ package ru.guliaev.crud_app.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Data
@@ -49,7 +47,7 @@ public class Client {
     /**
      * Роль
      */
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "role_id")
     private Role role;
 

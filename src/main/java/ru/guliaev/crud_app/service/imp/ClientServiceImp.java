@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.guliaev.crud_app.controller.dto.ClientDto;
-import ru.guliaev.crud_app.controller.dto.RoleDto;
 import ru.guliaev.crud_app.controller.dto.StatusResponse;
 import ru.guliaev.crud_app.entity.Client;
 import ru.guliaev.crud_app.entity.Role;
@@ -13,10 +12,10 @@ import ru.guliaev.crud_app.repository.ClientRepository;
 import ru.guliaev.crud_app.repository.RoleRepository;
 import ru.guliaev.crud_app.service.ClientService;
 import ru.guliaev.crud_app.utils.ClientDtoMapper;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,22 +28,18 @@ public class ClientServiceImp implements ClientService {
     @Override
     @Transactional
     public ClientDto createClient(ClientDto clientDto) {
+        Optional<Role> roleOptional = roleRepository.findByNameOfRole(clientDto.getNameOfRole());
+        if (roleOptional.isEmpty()) {
+            log.error("Роль не найдена в репозитории");
+        }
+        Role role = roleOptional.get(); // дописать исключение
         Client client = ClientDtoMapper.toEntity(clientDto);
-        RoleDto roleDto = new RoleDto(clientDto.getClientRole()); // получил роль от клиента
-        Role role = roleRepository.findByName(roleDto.getNameOfRole());
-
-        //todo При создании пользователя указывать его роль текстом
-        //
-        //{
-        //"name": "Andrew",
-        //"surname": "Bessonov",
-        //"role": "admin"
-        //}
-        return ClientDtoMapper.toDto(client) ;
+        client.setRole(role);
+        Client savedClient = clientRepository.save(client);
+        return ClientDtoMapper.toDto(savedClient);
     }
 
     @Override
-    @Transactional
     public ClientDto getClientById(Long id) {
         Client client = clientRepository.findById(id)
                 .orElseThrow();
@@ -52,7 +47,6 @@ public class ClientServiceImp implements ClientService {
     }
 
     @Override
-    @Transactional
     public List<ClientDto> getAllClients() {
         List<Client> allClients = (List<Client>) clientRepository.findAll();
         return allClients.stream()
@@ -62,15 +56,34 @@ public class ClientServiceImp implements ClientService {
 
     @Override
     @Transactional
-    public ClientDto update(ClientDto clientDto, Long  id) {
+    public ClientDto update(ClientDto clientDto, Long id) {
         Client client = clientRepository.findById(id)
                 .orElseThrow();
-        client.setName(clientDto.getName());
-        client.setSurname(clientDto.getSurname());
-        client.setBirthday(clientDto.getBirthday());
-        client.setPhoneNumber(clientDto.getPhoneNumber());
+        if (clientDto.getName() != null) {
+            client.setName(clientDto.getName());
+        }
+        if (clientDto.getSurname() != null) {
+            client.setSurname(clientDto.getSurname());
+        }
+        if (clientDto.getBirthday() != null) {
+            client.setBirthday(clientDto.getBirthday());
+        }
+        if (clientDto.getPhoneNumber() != null) {
+            client.setPhoneNumber(clientDto.getPhoneNumber());
+        }
+
+        String nameOfRole = clientDto.getNameOfRole();
+        if (nameOfRole != null) {
+            Optional<Role> roleOptional = roleRepository.findByNameOfRole(nameOfRole);
+            if (roleOptional.isEmpty()) {
+                log.error("Роль не найдена в репозитории");
+            }
+            Role role = roleOptional.get();
+            client.setRole(role);
+        }
+
         clientRepository.save(client);
-        return clientDto;
+        return ClientDtoMapper.toDto(client);
     }
 
     @Override
@@ -81,11 +94,14 @@ public class ClientServiceImp implements ClientService {
     }
 
     @Override
+    @Transactional
     public StatusResponse deleteAll() {
+        Iterable<Client> allClients = clientRepository.findAll();
         clientRepository.deleteAll();
         return new StatusResponse("Данные всех клиентов успешно удалены");
     }
 
+    @Deprecated(since = "1.04.24")
     public BigDecimal calculate(BigDecimal one, BigDecimal two, String command) {
         if ("multiply".equals(command)) {
             return one.multiply(two);
@@ -100,13 +116,5 @@ public class ClientServiceImp implements ClientService {
             return one.max(two);
         }
         throw new RuntimeException("Command %s is not supported".formatted(command));
-    }
-
-    public Client createNewClient(String name, String surname) {
-        Client client = new Client();
-        client.setId(1);
-        client.setName(name);
-        client.setSurname(surname);
-        return client;
     }
 }

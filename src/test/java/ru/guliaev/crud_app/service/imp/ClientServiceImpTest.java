@@ -8,9 +8,10 @@ import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Deprecated(since = "1.04.24")
 class ClientServiceImpTest {
 
-    private ClientServiceImp clientService = new ClientServiceImp(null);
+    private ClientServiceImp clientService = new ClientServiceImp(null, null);
 
     @Test
     public void calculate_multiplyCommand_success() {
@@ -37,16 +38,6 @@ class ClientServiceImpTest {
     public void calculate_invalidCommand_exception() {
         Assertions.assertThrowsExactly(RuntimeException.class,
                 () -> clientService.calculate(new BigDecimal(10), new BigDecimal(5), "v1"));
-    }
-
-    @Test
-    void createNewClient_correctParams_success() {
-        Client result = clientService.createNewClient("Andrew", "Bessonov");
-
-        Assertions.assertNotNull(result);
-        Assertions.assertEquals("Andrew", result.getName());
-        Assertions.assertEquals("Bessonov", result.getSurname());
-        Assertions.assertEquals(1, result.getId());
     }
 
     @Test

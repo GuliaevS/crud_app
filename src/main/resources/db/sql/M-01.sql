@@ -13,9 +13,3 @@ CREATE TABLE client
     phone_number VARCHAR(255),
     role_id      SERIAL REFERENCES role (id)
 );
-
-CREATE TABLE permissions
-(
-    id   SERIAL PRIMARY KEY,
-    name VARCHAR(255)
-)

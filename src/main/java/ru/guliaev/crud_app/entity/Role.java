@@ -2,8 +2,6 @@ package ru.guliaev.crud_app.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Data
@@ -25,9 +23,4 @@ public class Role {
      */
     @Column(name = "name_of_role")
     private String nameOfRole;
-
-    @Builder.Default
-    @ToString.Exclude
-    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
-    private List<Client> clients = new ArrayList<>();
 }

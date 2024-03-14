@@ -10,7 +10,6 @@ import ru.guliaev.crud_app.entity.Role;
 import ru.guliaev.crud_app.repository.RoleRepository;
 import ru.guliaev.crud_app.service.RoleService;
 import ru.guliaev.crud_app.utils.RoleDtoMapper;
-
 import java.util.List;
 
 @Service

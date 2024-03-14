@@ -21,6 +21,8 @@ public class ClientDtoMapper {
                 .name(client.getName())
                 .surname(client.getSurname())
                 .birthday(client.getBirthday())
+                .phoneNumber(client.getPhoneNumber())
+                .nameOfRole(client.getRole().getNameOfRole())
                 .build();
     }
 }
