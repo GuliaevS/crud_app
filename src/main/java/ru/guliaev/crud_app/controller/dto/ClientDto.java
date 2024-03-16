@@ -32,7 +32,7 @@ public class ClientDto {
     private String phoneNumber;
 
     /**
-     *
+     * Роль клиента
      */
     private String nameOfRole;
 }

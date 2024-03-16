@@ -8,10 +8,13 @@ import ru.guliaev.crud_app.controller.dto.ClientDto;
 import ru.guliaev.crud_app.controller.dto.StatusResponse;
 import ru.guliaev.crud_app.entity.Client;
 import ru.guliaev.crud_app.entity.Role;
+import ru.guliaev.crud_app.exception.IdException;
+import ru.guliaev.crud_app.exception.RoleNotFoundException;
 import ru.guliaev.crud_app.repository.ClientRepository;
 import ru.guliaev.crud_app.repository.RoleRepository;
 import ru.guliaev.crud_app.service.ClientService;
 import ru.guliaev.crud_app.utils.ClientDtoMapper;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -25,57 +28,49 @@ public class ClientServiceImp implements ClientService {
 
     @Override
     @Transactional
-    public ClientDto createClient(ClientDto clientDto) {
+    public ClientDto create(ClientDto clientDto) {
         Optional<Role> roleOptional = roleRepository.findByNameOfRole(clientDto.getNameOfRole());
         if (roleOptional.isEmpty()) {
-            log.error("Роль не найдена в репозитории");
+            throw new RoleNotFoundException("Role not found in repository");
         }
-        Role role = roleOptional.get(); // дописать исключение
+
+        Role role = roleOptional.get();
         Client client = ClientDtoMapper.toEntity(clientDto);
         client.setRole(role);
-        Client savedClient = clientRepository.save(client);
-        return ClientDtoMapper.toDto(savedClient);
+        clientRepository.save(client);
+        return ClientDtoMapper.toDto(client);
     }
 
     @Override
     public ClientDto getClientById(Long id) {
         Client client = clientRepository.findById(id)
-                .orElseThrow();
+                .orElseThrow(()
+                        -> new IdException("Id %d of client is not found".formatted(id)));
+
         return ClientDtoMapper.toDto(client);
     }
 
     @Override
     public List<ClientDto> getAllClients() {
-        List<Client> allClients = (List<Client>) clientRepository.findAll();
-        return allClients.stream()
-                .map(ClientDtoMapper::toDto)
-                .toList();
+        Iterable<Client> allClients = clientRepository.findAll();
+        return ClientDtoMapper.toDtoList(allClients);
     }
 
     @Override
     @Transactional
     public ClientDto update(ClientDto clientDto, Long id) {
         Client client = clientRepository.findById(id)
-                .orElseThrow();
-        if (clientDto.getName() != null) {
-            client.setName(clientDto.getName());
-        }
-        if (clientDto.getSurname() != null) {
-            client.setSurname(clientDto.getSurname());
-        }
-        if (clientDto.getBirthday() != null) {
-            client.setBirthday(clientDto.getBirthday());
-        }
-        if (clientDto.getPhoneNumber() != null) {
-            client.setPhoneNumber(clientDto.getPhoneNumber());
-        }
+                .orElseThrow(()
+                        -> new IdException("Id %d of client is not found".formatted(id)));
 
-        String nameOfRole = clientDto.getNameOfRole();
-        if (nameOfRole != null) {
-            Optional<Role> roleOptional = roleRepository.findByNameOfRole(nameOfRole);
+        ClientDtoMapper.fillIn(client, clientDto);
+
+        if (clientDto.getNameOfRole() != null) {
+            Optional<Role> roleOptional = roleRepository.findByNameOfRole(clientDto.getNameOfRole());
             if (roleOptional.isEmpty()) {
-                log.error("Роль не найдена в репозитории");
+                throw new RoleNotFoundException("Role not found in repository");
             }
+
             Role role = roleOptional.get();
             client.setRole(role);
         }

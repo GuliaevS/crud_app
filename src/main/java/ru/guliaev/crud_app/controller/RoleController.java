@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.guliaev.crud_app.controller.dto.RoleDto;
 import ru.guliaev.crud_app.controller.dto.StatusResponse;
 import ru.guliaev.crud_app.service.imp.RoleServiceImp;
+
 import java.util.List;
 
 @RestController
@@ -56,7 +57,7 @@ public class RoleController {
     /**
      * Удаление роли по id
      *
-     * @param id
+     * @param id роли
      * @return статус
      */
     @DeleteMapping("/delete/{id}")

@@ -7,12 +7,13 @@ import org.springframework.web.bind.annotation.*;
 import ru.guliaev.crud_app.controller.dto.ClientDto;
 import ru.guliaev.crud_app.controller.dto.StatusResponse;
 import ru.guliaev.crud_app.service.imp.ClientServiceImp;
+
 import java.util.List;
 
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/client")
 public class ClientController {
 
     private final ClientServiceImp clientServiceImp;
@@ -26,7 +27,7 @@ public class ClientController {
     @PostMapping("/create")
     public ClientDto create(@Valid @RequestBody ClientDto clientDto) {
         log.info("[API] create new client {}", clientDto);
-        return clientServiceImp.createClient(clientDto);
+        return clientServiceImp.create(clientDto);
     }
 
     /**
@@ -56,7 +57,7 @@ public class ClientController {
      * Обновление данных существующих клиентов
      *
      * @param clientDto Новое данные клиента
-     * @param id клиента
+     * @param id        клиента
      * @return clientDto - обновленный клиент, id
      */
 

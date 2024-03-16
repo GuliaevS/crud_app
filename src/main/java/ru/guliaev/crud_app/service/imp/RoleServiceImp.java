@@ -7,9 +7,11 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.guliaev.crud_app.controller.dto.RoleDto;
 import ru.guliaev.crud_app.controller.dto.StatusResponse;
 import ru.guliaev.crud_app.entity.Role;
+import ru.guliaev.crud_app.exception.IdException;
 import ru.guliaev.crud_app.repository.RoleRepository;
 import ru.guliaev.crud_app.service.RoleService;
 import ru.guliaev.crud_app.utils.RoleDtoMapper;
+
 import java.util.List;
 
 @Service
@@ -22,27 +24,28 @@ public class RoleServiceImp implements RoleService {
     @Override
     @Transactional
     public RoleDto create(RoleDto roleDto) {
-        roleRepository.save(RoleDtoMapper.toEntity(roleDto));
-        return roleDto;
+        Role savedRole = RoleDtoMapper.toEntity(roleDto);
+        roleRepository.save(savedRole);
+        return RoleDtoMapper.toDto(savedRole);
     }
 
     @Override
     @Transactional
     public List<RoleDto> getAllRoles() {
-        List <Role> allRoles = (List<Role>) roleRepository.findAll();
-        return allRoles.stream()
-                .map(RoleDtoMapper::toDto)
-                .toList();
+        Iterable<Role> allRoles = roleRepository.findAll();
+        return RoleDtoMapper.toDtoList(allRoles);
     }
 
     @Override
     @Transactional
     public RoleDto update(RoleDto roleDto, Long id) {
         Role role = roleRepository.findById(id)
-                .orElseThrow();
+                .orElseThrow(()
+                        -> new IdException("Id %d of role is not found".formatted(id)));
+
         role.setNameOfRole(roleDto.getNameOfRole());
         roleRepository.save(role);
-        return roleDto;
+        return RoleDtoMapper.toDto(role);
     }
 
     @Override
