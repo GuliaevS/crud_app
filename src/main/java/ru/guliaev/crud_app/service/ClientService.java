@@ -1,21 +1,22 @@
 package ru.guliaev.crud_app.service;
 
-import org.springframework.stereotype.Service;
+import ru.guliaev.crud_app.controller.dto.ClientDto;
 import ru.guliaev.crud_app.controller.dto.StatusResponse;
-import ru.guliaev.crud_app.entity.Client;
 
 import java.util.List;
 
 public interface ClientService {
 
-     void createClient(Client client);
+    ClientDto create(ClientDto clientDto);
 
-    Client getClientById(Long id);
+    ClientDto getClientById(Long id);
 
-    List<Client> getAllClients();
+    List<ClientDto> getAllClients();
 
-    Client update(Client client);
+    ClientDto update(ClientDto clientDto, Long id);
 
-    void deleteById(Long id);
+    StatusResponse deleteById(Long id);
+
+    StatusResponse deleteAll();
 
 }

@@ -1,12 +1,7 @@
 package ru.guliaev.crud_app.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
-
+import lombok.*;
 import java.time.LocalDate;
 
 @Entity
@@ -14,7 +9,7 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "clients")
+@Table(name = "client")
 public class Client {
 
     /**
@@ -48,4 +43,12 @@ public class Client {
      */
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    /**
+     * Роль
+     */
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "role_id")
+    private Role role;
+
 }
